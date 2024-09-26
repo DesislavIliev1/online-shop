@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Services\ProductService;
 use App\Http\Requests\Products\StoreProductRequest;
-use App\Http\Requests\Products\UpdateProductRequest;
+// use App\Http\Requests\Products\UpdateProductRequest;
 use Illuminate\Http\Request;
 
 
 class ProductController extends Controller
 {
     private $productService;
+
     public function __construct(ProductService $productService)
     {
         $this->productService = $productService;
@@ -24,11 +25,11 @@ class ProductController extends Controller
         $search = $request->input('search');
         $from = $request->input('from');
         $to = $request->input('to');
-        $productsQuery = Product::with(['category', 'user', 'location']);
+        $productsQuery = Product::with(['category', 'user']);
 
 
         if ($request->input('clear')) {
-            return redirect()->route('AutoAdmin.products.index');
+            return redirect()->route('Admin.products.index');
         }
         
         if ($from) {
@@ -87,10 +88,10 @@ class ProductController extends Controller
     {   
         try {
             $this->productService->createProduct($request->validated(), $request);
-            return redirect()->route('AutoAdmin.products.index')->with('success', 'Product created successfully.');
+            return redirect()->route('Admin.products.index')->with('success', 'Product created successfully.');
         } catch (\Exception $e) {
             \Log::channel('uploadAd')->error('Product creation failed', ['error' => $e->getMessage()]);
-            return redirect()->route('AutoAdmin.products.index')->with('error', 'Failed to create product.');
+            return redirect()->route('Admin.products.index')->with('error', 'Failed to create product.');
         }
     }
 

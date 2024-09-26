@@ -170,9 +170,9 @@
                                             <button data-id="{{ $product->id }}"
                                                 class="btn btn-primary btn-sm up-bt d-none">@lang('admin/general.upload')</button>
                                         </td>
-                                        <td>{{ $product->getCategoryName() }}</td>
+                                        {{-- <td>{{ $product->getCategoryName() }}</td> --}}
                                         <td>{{ $product->user->name }}</td>
-                                        <td>{{ $product->location->name }}</td>
+                                        {{-- <td>{{ $product->location->name }}</td> --}}
                                         <td>{{ $product->price }}</td>
 
                                         <td class="d-flex">
@@ -195,7 +195,7 @@
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                     <a class="dropdown-item"
-                                                        href="{{ route('product.index', $product->slug) }}"
+                                                        href="{{ route('Admin.products.index', $product->id) }}"
                                                         target="_blank"> <i class="fas fa-eye"></i> @lang('admin/general.showInMC')</a>
                                                     @if (isset($product->user->slug))
                                                         <a class="dropdown-item"
@@ -206,9 +206,9 @@
                                                         <a class="dropdown-item disabled" href="#" target="_blank">
                                                             <i class="fas fa-eye"></i> @lang('admin/general.showPublicProfile')</a>
                                                     @endif
-                                                    <a class="dropdown-item"
+                                                    {{-- <a class="dropdown-item"
                                                         href="{{ route('Admin.users.show', $product->user->id) }}"> <i
-                                                            class="fas fa-fw fa-lock "></i> @lang('admin/general.showUserInAdmin')</a>
+                                                            class="fas fa-fw fa-lock "></i> @lang('admin/general.showUserInAdmin')</a> --}}
                                                 </div>
                                             </div>
                                         </td>

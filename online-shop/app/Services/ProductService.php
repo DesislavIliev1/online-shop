@@ -23,7 +23,7 @@ class ProductService
     }
 
     public function getProducts(){
-        $products = Products::all()->get();
+        $products = Product::all()->get();
         
       return $products;
     }
@@ -183,33 +183,18 @@ class ProductService
             Log::channel('uploadAd')->info('Product creation attempt', $data);
             $data['user_id'] = Auth::id();
 
-            $creditAmount = Setting::where('name', 'product_credit_amount')->first()->value;
-
-            $rule = $this->creditService->getCategoryCreditRule($request->category_id);
-            $user = Auth::user();
-            $checkCreditRule = $this->creditService->applyCreditRule($request);
-
-
-            if(((float)$user->getAllCredits() < (float)$creditAmount) && $checkCreditRule !== true){
-                Log::channel('credits')->warning('User ID:'.Auth::user()->id. ' tried to upload product without enough credits.');
-                return response()->json(['error' => 'Not enough credits.'], 403);
-            }
-
-            $deducted = $this->creditService->deductForProductUpload($user, $rule);
-
             if ($request->has('uploaded_images')) {
                 $imageFileNames = $request->input('uploaded_images');
                 $data['image'] = json_encode($imageFileNames);
             }
-
+            
             $product = Product::create($data);
             $ipAddress = request()->ip();
            
             $this->recache($product->id);
-            $this->recacheHomepage($product->id);
 
             Log::channel('uploadAd')->info('Product created successfully', ['product_id' => $product->id]);
-            Log::channel('credits')->info('Product uploaded by User ID: '.Auth::user()->id .' with product ID: '.$product->id . ' and spent '.($deducted ? $creditAmount : 0) .' credits.');
+
             return $product;
         } catch (\Exception $e) {
             Log::channel('uploadAd')->error('Product creation failed', ['error' => $e->getMessage()]);

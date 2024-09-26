@@ -14,6 +14,7 @@ class Product extends Model
         'slug',
         'description',
         'category_id',
+        'user_id',
         'status',
         'price',
         'image',
@@ -27,4 +28,16 @@ class Product extends Model
     protected $dates = [
         'created_at', 'updated_at',
     ];
+    
+
+    public function category()
+    {
+        return $this->hasOne(Category::class, 'id', 'category_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }
+
